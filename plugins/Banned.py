@@ -11,6 +11,12 @@ async def banned_users(_, client, message: Message):
 
 banned_user = filters.create(banned_users)
 
+async def disabled_chat(_, client, message: Message):
+    return message.chat.id in temp.BANNED_CHATS
+
+disabled_group=filters.create(disabled_chat)
+
+
 @Client.on_message(filters.private & banned_user & filters.incoming)
 async def ban_reply(bot, message):
     ban = await db.get_ban_status(message.from_user.id)
@@ -19,7 +25,7 @@ async def ban_reply(bot, message):
 @Client.on_message(filters.group & disabled_group & filters.incoming)
 async def grp_bd(bot, message):
     buttons = [[
-        InlineKeyboardButton('𝙾𝚆𝙽𝙴𝚁', url=f'')
+        InlineKeyboardButton('𝙾𝚆𝙽𝙴𝚁', url=f'https://t.me/EnthadaNokunne')
     ]]
     reply_markup=InlineKeyboardMarkup(buttons)
     vazha = await db.get_chat(message.chat.id)
